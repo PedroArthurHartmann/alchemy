@@ -123,11 +123,9 @@ int main(int argc, char *argv[])
     int tam = pic[ORIGEM].width * pic[ORIGEM].height;
     memcpy(pic[SAIDA].pixels, pic[ORIGEM].pixels, sizeof(RGBpixel) * tam);
 
-    //NOSSO CODIGO COMECO
-    #pragma region nosso_codigo
-    qsort(&pic[DESEJ], width * height)
-    #pragma endregion nosso_codigo
-    //NOSSO CODIGO FIM
+    #pragma region NOSSO_CODIGO
+    
+    #pragma endregion NOSSO_CODIGO
 
     // NÃO ALTERAR A PARTIR DAQUI!
 
