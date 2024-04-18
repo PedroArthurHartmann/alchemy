@@ -1,6 +1,7 @@
 {
     "files.associations": {
-        "math.h": "c"
+        "math.h": "c",
+        "soil.h": "c"
     },
     "cmake.configureOnOpen": false
 }

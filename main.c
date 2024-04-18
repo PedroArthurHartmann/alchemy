@@ -15,7 +15,7 @@
 #endif
 
 // SOIL é a biblioteca para leitura das imagens
-#include "SOIL.h"
+#include "include/SOIL.h"
 
 // Um pixel RGBpixel (24 bits)
 typedef struct
@@ -123,23 +123,11 @@ int main(int argc, char *argv[])
     int tam = pic[ORIGEM].width * pic[ORIGEM].height;
     memcpy(pic[SAIDA].pixels, pic[ORIGEM].pixels, sizeof(RGBpixel) * tam);
 
-    //
-    // Neste ponto, voce deve implementar o algoritmo!
-    // (ou chamar funcoes para fazer isso)
-    //
-    // Aplica o algoritmo e gera a saida em pic[SAIDA].pixels...
-    // ...
-    // ...
-    //
-    // Exemplo de manipulação: inverte as cores na imagem de saída
-    /**/
-    for (int i = 0; i < tam; i++)
-    {
-        pic[SAIDA].pixels[i].r = 255 - pic[SAIDA].pixels[i].r;
-        pic[SAIDA].pixels[i].g = 255 - pic[SAIDA].pixels[i].g;
-        pic[SAIDA].pixels[i].b = 255 - pic[SAIDA].pixels[i].b;
-    }
-    /**/
+    //NOSSO CODIGO COMECO
+    #pragma region nosso_codigo
+    qsort(&pic[DESEJ], width * height)
+    #pragma endregion nosso_codigo
+    //NOSSO CODIGO FIM
 
     // NÃO ALTERAR A PARTIR DAQUI!
 
