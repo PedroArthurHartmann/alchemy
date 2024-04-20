@@ -1,3 +1,4 @@
 alchemy
 alchemy.exe
 main.o
+lib/SOIL/*.o
