@@ -2,3 +2,4 @@ alchemy
 alchemy.exe
 main.o
 lib/SOIL/*.o
+out.bmp

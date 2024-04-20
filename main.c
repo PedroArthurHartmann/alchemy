@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     if (argc < 3)
     {
         printf("alchemy [origem] [destino]\n");
-        printf("Origem é a fonte das cores, destino é a imagem desejada\n");
+        printf("Origem eh a fonte das cores, destino eh a imagem desejada\n");
         exit(1);
     }
     glutInit(&argc, argv);
