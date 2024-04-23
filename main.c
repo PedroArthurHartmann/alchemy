@@ -124,7 +124,20 @@ int main(int argc, char *argv[])
     memcpy(pic[SAIDA].pixels, pic[ORIGEM].pixels, sizeof(RGBpixel) * tam);
 
     #pragma region NOSSO_CODIGO
+
+    Img sorted = pic[ORIGEM];
+    memcpy(sorted.pixels, pic[ORIGEM].pixels, tam);
+    qsort(sorted.pixels, tam, sizeof(RGBpixel), &cmp);
     
+    for (int i = 0; i < pic[DESEJ].height; i++) {
+        for (int j = 0; j < pic[DESEJ].width; j++) {
+            int abs_idx = (i * width) + j;
+            RGBpixel curr_pix = pic[DESEJ].pixels[abs_idx];
+            
+            //achar pixel mais proximo
+        }
+    }
+
     #pragma endregion NOSSO_CODIGO
 
     // NÃO ALTERAR A PARTIR DAQUI!
