@@ -128,6 +128,7 @@ int main(int argc, char *argv[])
     Img sorted = pic[ORIGEM];
     memcpy(sorted.pixels, pic[ORIGEM].pixels, tam);
     qsort(sorted.pixels, tam, sizeof(RGBpixel), &cmp);
+    memcpy(pic[SAIDA].pixels, sorted.pixels, tam);
     
     for (int i = 0; i < pic[DESEJ].height; i++) {
         for (int j = 0; j < pic[DESEJ].width; j++) {
