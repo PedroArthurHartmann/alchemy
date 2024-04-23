@@ -125,8 +125,11 @@ int main(int argc, char *argv[])
 
     #pragma region NOSSO_CODIGO
 
-    Img sorted = pic[ORIGEM];
-    memcpy(sorted.pixels, pic[ORIGEM].pixels, tam);
+    Img sorted;
+    sorted.width = pic[ORIGEM].width;
+    sorted.height = pic[ORIGEM].height;
+    sorted.pixels = malloc(tam * sizeof(RGBpixel));
+    memcpy(sorted.pixels, pic[ORIGEM].pixels, sizeof(RGBpixel) * tam);
     qsort(sorted.pixels, tam, sizeof(RGBpixel), &cmp);
     memcpy(pic[SAIDA].pixels, sorted.pixels, tam);
     
