@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
     
     for (int i = 0; i < pic[DESEJ].height; i++) {
         for (int j = 0; j < pic[DESEJ].width; j++) {
-            int abs_idx = (i * width) + j;
+            const int abs_idx = (i * width) + j;
             RGBpixel curr_pix = pic[DESEJ].pixels[abs_idx];
             
             //achar pixel mais proximo
