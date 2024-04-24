@@ -125,14 +125,23 @@ int main(int argc, char *argv[])
 
     #pragma region NOSSO_CODIGO
 
+    // Quicksort nos pixels de ORIGEM
+
+    // Cria uma copia da imagem de origem
     Img sorted;
     sorted.width = pic[ORIGEM].width;
     sorted.height = pic[ORIGEM].height;
     sorted.pixels = malloc(tam * sizeof(RGBpixel));
     memcpy(sorted.pixels, pic[ORIGEM].pixels, sizeof(RGBpixel) * tam);
+
+    // Realiza quicksort em sorted.pixels
     qsort(sorted.pixels, tam, sizeof(RGBpixel), &cmp);
-    memcpy(pic[SAIDA].pixels, sorted.pixels, tam);
+
+    // Determina SAIDA.pixels como sorted.pixels (debug para determinar se o qsort funciona)
+    memcpy(pic[SAIDA].pixels, sorted.pixels, sizeof(RGBpixel) * tam);
     
+    // Montagem de SAIDA com base em sorted
+    /*
     for (int i = 0; i < pic[DESEJ].height; i++) {
         for (int j = 0; j < pic[DESEJ].width; j++) {
             const int abs_idx = (i * width) + j;
@@ -140,7 +149,24 @@ int main(int argc, char *argv[])
             
             //achar pixel mais proximo
         }
+    }*/
+    RGBpixel *ptra, *ptrb;
+    unsigned char ared, agreen, ablue; // pixels de DESEJ
+    unsigned char bred = 'a', bgreen, bblue; // pixels de sorted
+    unsigned char copy = 'a';
+    int b = 0;
+    printf("%d",pic[DESEJ].height * pic[DESEJ].width);
+    for (int i = 0; i < pic[DESEJ].height * pic[DESEJ].width; i++, ptra++) {
+        ptra = sorted.pixels;
+        ared = (*ptra).r; agreen = (*ptra).g; ablue = (*ptra).b;
+        for (int j = 0; j < pic[DESEJ].height * pic[DESEJ].width; j++, ptrb++) {
+            bred = (*ptrb).r; bblue = (*ptrb).b; bgreen = (*ptrb).g;
+            if (bred != copy) b = 1;
+            copy = bred;
+        }
+        printf("i = %d | ", i);
     }
+    printf("b = %d\nfim\n", b);
 
     #pragma endregion NOSSO_CODIGO
 
