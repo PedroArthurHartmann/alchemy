@@ -150,23 +150,17 @@ int main(int argc, char *argv[])
             //achar pixel mais proximo
         }
     }*/
-    RGBpixel *ptra, *ptrb;
+    RGBpixel *ptra = pic[DESEJ].pixels, *ptrb = sorted.pixels;
     unsigned char ared, agreen, ablue; // pixels de DESEJ
-    unsigned char bred = 'a', bgreen, bblue; // pixels de sorted
-    unsigned char copy = 'a';
-    int b = 0;
-    printf("%d",pic[DESEJ].height * pic[DESEJ].width);
+    unsigned char bred, bgreen, bblue; // pixels de sorted
+    ared = (*ptra).r;
     for (int i = 0; i < pic[DESEJ].height * pic[DESEJ].width; i++, ptra++) {
-        ptra = sorted.pixels;
         ared = (*ptra).r; agreen = (*ptra).g; ablue = (*ptra).b;
         for (int j = 0; j < pic[DESEJ].height * pic[DESEJ].width; j++, ptrb++) {
             bred = (*ptrb).r; bblue = (*ptrb).b; bgreen = (*ptrb).g;
-            if (bred != copy) b = 1;
-            copy = bred;
         }
-        printf("i = %d | ", i);
     }
-    printf("b = %d\nfim\n", b);
+    printf("fim\n");
 
     #pragma endregion NOSSO_CODIGO
 
