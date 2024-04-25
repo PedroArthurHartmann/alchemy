@@ -142,8 +142,6 @@ int main(int argc, char *argv[])
     
     // Montagem de SAIDA com base em sorted
     printf("tamanho img: %d\n", pic[DESEJ].height*pic[DESEJ].width);
-    int contador = 0, contadorb = 0;
-
 
     RGBpixel *ptra = pic[DESEJ].pixels, *ptrb = sorted.pixels;
     unsigned char ared, agreen, ablue; // pixels de DESEJ
@@ -175,21 +173,17 @@ int main(int argc, char *argv[])
                     lembra = comparaPixel; primeira = 0;
                 }
             
-           /* //debug
-           if (j % 1000 == 0) {
-               contadorb++;
-               printf("contador j: %d tam: %d\n", contadorb, pic[DESEJ].height*pic[DESEJ].width);
+           //debug
+           /*if (j % 1000 == 0) {
+               printf("contador j: %d tam: %d\n", j, pic[DESEJ].height*pic[DESEJ].width);
            }
            */
         } // for j nao para???
         montagem[i] = lembra;
-        /* debug
-        if (i % 1000 == 0) {
-            contador++;
-            printf("contador i: %d\n", contador);
-        } */
+        //debug
+        //printf("contador i: %d, tam: %d\n", i, pic[DESEJ].height * pic[DESEJ].width);
     }
-    memcpy(pic[SAIDA].pixels, sorted.pixels, sizeof(RGBpixel) * tam);
+    memcpy(pic[SAIDA].pixels, montagem, sizeof(RGBpixel) * tam);
     printf("fim\n");
 
     #pragma endregion NOSSO_CODIGO
