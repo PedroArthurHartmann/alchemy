@@ -141,15 +141,6 @@ int main(int argc, char *argv[])
     memcpy(pic[SAIDA].pixels, sorted.pixels, sizeof(RGBpixel) * tam);
     
     // Montagem de SAIDA com base em sorted
-    /*
-    for (int i = 0; i < pic[DESEJ].height; i++) {
-        for (int j = 0; j < pic[DESEJ].width; j++) {
-            const int abs_idx = (i * width) + j;
-            RGBpixel curr_pix = pic[DESEJ].pixels[abs_idx];
-            
-            //achar pixel mais proximo
-        }
-    }*/
     printf("tamanho img: %d\n", pic[DESEJ].height*pic[DESEJ].width);
     int contador = 0, contadorb = 0;
 
@@ -183,30 +174,20 @@ int main(int argc, char *argv[])
                 (primeira)) {
                     lembra = comparaPixel; primeira = 0;
                 }
-            /* tentativa de outra implementacao (incompleta)
-            *c = compara;
-            bred = (*ptrb).r; bblue = (*ptrb).b; bgreen = (*ptrb).g;
-            // achar pixel mais proximo
-            *c = abs(ared - bred);
-            *c++;
-            *c = abs(agreen - bgreen);
-            *c++;
-            *c = abs(ablue - bblue);
-            */
-
-           /* debug
+            
+           /* //debug
            if (j % 1000 == 0) {
                contadorb++;
                printf("contador j: %d tam: %d\n", contadorb, pic[DESEJ].height*pic[DESEJ].width);
            }
            */
         } // for j nao para???
-    montagem[i] = lembra;
-    /* debug
-    if (i % 1000 == 0) {
-        contador++;
-        printf("contador i: %d\n", contador);
-    } */
+        montagem[i] = lembra;
+        /* debug
+        if (i % 1000 == 0) {
+            contador++;
+            printf("contador i: %d\n", contador);
+        } */
     }
     memcpy(pic[SAIDA].pixels, sorted.pixels, sizeof(RGBpixel) * tam);
     printf("fim\n");
