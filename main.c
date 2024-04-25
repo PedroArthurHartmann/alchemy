@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
     memcpy(sorted.pixels, pic[ORIGEM].pixels, sizeof(RGBpixel) * tam);
 
     // Realiza quicksort em sorted.pixels
-    qsort(sorted.pixels, tam, sizeof(RGBpixel), &cmp);
+    // qsort(sorted.pixels, tam, sizeof(RGBpixel), &cmp);
 
     // Determina SAIDA.pixels como sorted.pixels (debug para determinar se o qsort funciona)
     // memcpy(pic[SAIDA].pixels, sorted.pixels, sizeof(RGBpixel) * tam);
@@ -146,22 +146,22 @@ int main(int argc, char *argv[])
     //int compara[3];
     //int *c;
     int diff;
-    // percorre pic[DESEJ]
-    for (int i = 0; i < tam; i++, *(ptra++)) {
+    // percorre pic[DESEJ].pixels
+    for (int i = 0; i < tam; i++, ptra++) {
         
-        ptrb = &sorted.pixels;
+        ptrb = sorted.pixels;
 
         // percorre sorted
-        for (int j = 0; j < tam; j++, *(ptrb++)) {
+        for (int j = 0; j < tam; j++, ptrb++) {
             if (j == 0 || diff > abs(cmp2(ptrb, ptra))) {
                 lembra = *ptrb;
                 diff = abs(cmp2(ptrb, ptra));
                 
                 if (diff == 0) break;
             }
-            //if (j % 100 == 0) {
+            /*if (j % 10000 == 0) {
                 printf("tam = %d | i = %d | j = %d | cmp2 = %d | diff = %d\n", tam, i, j, abs(cmp2(ptrb, ptra)), diff);
-            //}
+            }*/
 
             /*if (j == 85) { // por algum motivo ele quebra sempre no 85
                 printf("ta no 85\n");
@@ -174,9 +174,10 @@ int main(int argc, char *argv[])
                 printf("r %c | %c\n", ptra->r, ptrb->r);
                 printf("g %c | %c\n", ptra->g, ptrb->g);
                 printf("b %c | %c\n", ptra->b, ptrb->b);
+                printf("-------\n");
             }*/
         }
-        printf("\nloop i = %d completo | lembra: r = %c : g = %c : b = %c\n", i, lembra.r, lembra.g, lembra.b);
+        //if (i % 10000 == 0) printf("\nloop i = %d completo | lembra: r = %c : g = %c : b = %c\n", i, lembra.r, lembra.g, lembra.b);
         if (i == tam / 10) printf("10%%\n");
         else if (i == tam / 4) printf("25%%\n");
         else if (i == tam / 2) printf("50%%\n");
