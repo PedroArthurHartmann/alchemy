@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
     memcpy(sorted.pixels, pic[ORIGEM].pixels, sizeof(RGBpixel) * tam);
 
     // Realiza quicksort em sorted.pixels
-    // qsort(sorted.pixels, tam, sizeof(RGBpixel), &cmp);
+    qsort(sorted.pixels, tam, sizeof(RGBpixel), &cmp);
 
     // Determina SAIDA.pixels como sorted.pixels (debug para determinar se o qsort funciona)
     // memcpy(pic[SAIDA].pixels, sorted.pixels, sizeof(RGBpixel) * tam);
@@ -141,12 +141,7 @@ int main(int argc, char *argv[])
     printf("tamanho img: %d\n", tam);
 
     RGBpixel *ptra = pic[DESEJ].pixels, *ptrb = sorted.pixels;
-    unsigned char ared, agreen, ablue; // pixels de DESEJ
-    unsigned char bred, bgreen, bblue; // pixels de sorted
-    RGBpixel a;
-    RGBpixel b;
     RGBpixel lembra;
-    RGBpixel comparaPixel;
     RGBpixel montagem[tam];
     //int compara[3];
     //int *c;
@@ -155,52 +150,31 @@ int main(int argc, char *argv[])
     for (int i = 0; i < tam; i++, *(ptra++)) {
         
         ptrb = &sorted.pixels;
-        ared = (*ptra).r; agreen = (*ptra).g; ablue = (*ptra).b;
-        a = *ptra;
 
         // percorre sorted
         for (int j = 0; j < tam; j++, *(ptrb++)) {
-            b = *ptrb;
-            /*comparaPixel.r = abs(ared - bred);
-            comparaPixel.g = abs(agreen - bgreen);
-            comparaPixel.b = abs(ablue - bblue);*/
             if (j == 0 || diff > abs(cmp2(ptrb, ptra))) {
-                lembra = b;
+                lembra = *ptrb;
                 diff = abs(cmp2(ptrb, ptra));
+                
+                if (diff == 0) break;
             }
-
-            if (diff == 0) break;
-            // aqui tem um negócio engraçado
-            // se tu deixar o printf fora do if, o código funciona normal
-            // mas demora uma eternidade pra completar por causa da quantidade de printf
-            if (j % 100 == 0) {
+            //if (j % 100 == 0) {
                 printf("tam = %d | i = %d | j = %d | cmp2 = %d | diff = %d\n", tam, i, j, abs(cmp2(ptrb, ptra)), diff);
-            }
+            //}
 
-            // ^ o código só funciona se as coisas aqui debaixo também estiverem comentadas
-
-            if (j == 85) { // por algum motivo ele quebra sempre no 85
+            /*if (j == 85) { // por algum motivo ele quebra sempre no 85
                 printf("ta no 85\n");
             }
             else if (j == 86) {
                 printf("passou do 85\n");
-            }
+            }*/
             /*if (j == 84 || j == 85) {
                 printf("  A | B\n");
                 printf("r %c | %c\n", ptra->r, ptrb->r);
                 printf("g %c | %c\n", ptra->g, ptrb->g);
                 printf("b %c | %c\n", ptra->b, ptrb->b);
             }*/
-            /*if ((comparaPixel.r < lembra.r && comparaPixel.g < lembra.g && comparaPixel.b < lembra.b)||
-                j == 0) {
-                    lembra = comparaPixel;
-                }*/
-            
-           //debug
-           /*if (j % 1000 == 0) {
-               printf("contador j: %d tam: %d\n", j, pic[DESEJ].height*pic[DESEJ].width);
-           }
-           */
         }
         printf("\nloop i = %d completo | lembra: r = %c : g = %c : b = %c\n", i, lembra.r, lembra.g, lembra.b);
         if (i == tam / 10) printf("10%%\n");
