@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
             b = *ptrb;
             comparaPixel.r = abs(ared - bred);
             comparaPixel.g = abs(agreen - bgreen);
-            comparaPixel.b = abs(ablue - agreen);
+            comparaPixel.b = abs(ablue - bblue);
 
             if ((comparaPixel.r < lembra.r && comparaPixel.g < lembra.g && comparaPixel.b < lembra.b)||
                 (primeira)) {
