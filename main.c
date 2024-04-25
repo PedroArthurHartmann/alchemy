@@ -141,25 +141,55 @@ int main(int argc, char *argv[])
     memcpy(pic[SAIDA].pixels, sorted.pixels, sizeof(RGBpixel) * tam);
     
     // Montagem de SAIDA com base em sorted
-    /*
-    for (int i = 0; i < pic[DESEJ].height; i++) {
-        for (int j = 0; j < pic[DESEJ].width; j++) {
-            const int abs_idx = (i * width) + j;
-            RGBpixel curr_pix = pic[DESEJ].pixels[abs_idx];
-            
-            //achar pixel mais proximo
-        }
-    }*/
+    printf("tamanho img: %d\n", pic[DESEJ].height*pic[DESEJ].width);
+    int contador = 0, contadorb = 0;
+
+
     RGBpixel *ptra = pic[DESEJ].pixels, *ptrb = sorted.pixels;
     unsigned char ared, agreen, ablue; // pixels de DESEJ
     unsigned char bred, bgreen, bblue; // pixels de sorted
-    ared = (*ptra).r;
+    RGBpixel a;
+    RGBpixel b;
+    RGBpixel lembra;
+    RGBpixel comparaPixel;
+    int primeira = 1;
+    RGBpixel montagem[pic[DESEJ].height*pic[DESEJ].width];
+    //int compara[3];
+    //int *c;
+
+    // percorre pic[DESEJ]
     for (int i = 0; i < pic[DESEJ].height * pic[DESEJ].width; i++, ptra++) {
         ared = (*ptra).r; agreen = (*ptra).g; ablue = (*ptra).b;
+        a = *ptra;
+        primeira = 1;
+
+        // percorre sorted
         for (int j = 0; j < pic[DESEJ].height * pic[DESEJ].width; j++, ptrb++) {
-            bred = (*ptrb).r; bblue = (*ptrb).b; bgreen = (*ptrb).g;
-        }
+            b = *ptrb;
+            comparaPixel.r = abs(ared - bred);
+            comparaPixel.g = abs(agreen - bgreen);
+            comparaPixel.b = abs(ablue - agreen);
+
+            if ((comparaPixel.r < lembra.r && comparaPixel.g < lembra.g && comparaPixel.b < lembra.b)||
+                (primeira)) {
+                    lembra = comparaPixel; primeira = 0;
+                }
+            
+           /* //debug
+           if (j % 1000 == 0) {
+               contadorb++;
+               printf("contador j: %d tam: %d\n", contadorb, pic[DESEJ].height*pic[DESEJ].width);
+           }
+           */
+        } // for j nao para???
+        montagem[i] = lembra;
+        /* debug
+        if (i % 1000 == 0) {
+            contador++;
+            printf("contador i: %d\n", contador);
+        } */
     }
+    memcpy(pic[SAIDA].pixels, sorted.pixels, sizeof(RGBpixel) * tam);
     printf("fim\n");
 
     #pragma endregion NOSSO_CODIGO
