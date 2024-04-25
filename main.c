@@ -118,12 +118,9 @@ int main(int argc, char *argv[])
 
     printf("Processando...\n");
 
-    // Copia imagem de origem na imagem de saída
-    // (NUNCA ALTERAR AS IMAGENS DE ORIGEM E DESEJADA)
-    int tam = pic[ORIGEM].width * pic[ORIGEM].height;
-    memcpy(pic[SAIDA].pixels, pic[ORIGEM].pixels, sizeof(RGBpixel) * tam);
-
     #pragma region NOSSO_CODIGO
+
+    int tam = pic[DESEJ].width * pic[DESEJ].height;
 
     // Quicksort nos pixels de ORIGEM
 
@@ -135,13 +132,13 @@ int main(int argc, char *argv[])
     memcpy(sorted.pixels, pic[ORIGEM].pixels, sizeof(RGBpixel) * tam);
 
     // Realiza quicksort em sorted.pixels
-    qsort(sorted.pixels, tam, sizeof(RGBpixel), &cmp);
+    // qsort(sorted.pixels, tam, sizeof(RGBpixel), &cmp);
 
     // Determina SAIDA.pixels como sorted.pixels (debug para determinar se o qsort funciona)
-    memcpy(pic[SAIDA].pixels, sorted.pixels, sizeof(RGBpixel) * tam);
+    // memcpy(pic[SAIDA].pixels, sorted.pixels, sizeof(RGBpixel) * tam);
     
     // Montagem de SAIDA com base em sorted
-    printf("tamanho img: %d\n", pic[DESEJ].height*pic[DESEJ].width);
+    printf("tamanho img: %d\n", tam);
 
     RGBpixel *ptra = pic[DESEJ].pixels, *ptrb = sorted.pixels;
     unsigned char ared, agreen, ablue; // pixels de DESEJ
@@ -150,27 +147,50 @@ int main(int argc, char *argv[])
     RGBpixel b;
     RGBpixel lembra;
     RGBpixel comparaPixel;
-    RGBpixel montagem[pic[DESEJ].height*pic[DESEJ].width];
+    RGBpixel montagem[tam];
     //int compara[3];
     //int *c;
     int diff;
-    if (cmp(&sorted.pixels[0], &sorted.pixels[2])) printf("iguais\n");
     // percorre pic[DESEJ]
-    for (int i = 0; i < pic[DESEJ].height * pic[DESEJ].width; i++, ptra++) {
+    for (int i = 0; i < tam; i++, *(ptra++)) {
+        
+        ptrb = &sorted.pixels;
         ared = (*ptra).r; agreen = (*ptra).g; ablue = (*ptra).b;
         a = *ptra;
 
         // percorre sorted
-        for (int j = 0; j < pic[DESEJ].height * pic[DESEJ].width; j++, ptrb++) {
+        for (int j = 0; j < tam; j++, *(ptrb++)) {
             b = *ptrb;
             /*comparaPixel.r = abs(ared - bred);
             comparaPixel.g = abs(agreen - bgreen);
             comparaPixel.b = abs(ablue - bblue);*/
-            if (j == 0 || abs(diff) > abs(cmp2(ptrb, ptra))) {
+            if (j == 0 || diff > abs(cmp2(ptrb, ptra))) {
                 lembra = b;
-                diff = cmp2(ptrb, ptra);
+                diff = abs(cmp2(ptrb, ptra));
             }
-            if (j % 10000 == 0) printf("j = %d | ", j);
+
+            if (diff == 0) break;
+            // aqui tem um negócio engraçado
+            // se tu deixar o printf fora do if, o código funciona normal
+            // mas demora uma eternidade pra completar por causa da quantidade de printf
+            if (j % 100 == 0) {
+                printf("tam = %d | i = %d | j = %d | cmp2 = %d | diff = %d\n", tam, i, j, abs(cmp2(ptrb, ptra)), diff);
+            }
+
+            // ^ o código só funciona se as coisas aqui debaixo também estiverem comentadas
+
+            if (j == 85) { // por algum motivo ele quebra sempre no 85
+                printf("ta no 85\n");
+            }
+            else if (j == 86) {
+                printf("passou do 85\n");
+            }
+            /*if (j == 84 || j == 85) {
+                printf("  A | B\n");
+                printf("r %c | %c\n", ptra->r, ptrb->r);
+                printf("g %c | %c\n", ptra->g, ptrb->g);
+                printf("b %c | %c\n", ptra->b, ptrb->b);
+            }*/
             /*if ((comparaPixel.r < lembra.r && comparaPixel.g < lembra.g && comparaPixel.b < lembra.b)||
                 j == 0) {
                     lembra = comparaPixel;
@@ -182,13 +202,17 @@ int main(int argc, char *argv[])
            }
            */
         }
-        printf("loop i completo\n");
+        printf("\nloop i = %d completo | lembra: r = %c : g = %c : b = %c\n", i, lembra.r, lembra.g, lembra.b);
+        if (i == tam / 10) printf("10%%\n");
+        else if (i == tam / 4) printf("25%%\n");
+        else if (i == tam / 2) printf("50%%\n");
+        else if (i == 3 * tam / 4) printf("75%%\n");
         montagem[i] = lembra;
         //debug
         //printf("contador i: %d, tam: %d\n", i, pic[DESEJ].height * pic[DESEJ].width);
     }
     memcpy(pic[SAIDA].pixels, montagem, sizeof(RGBpixel) * tam);
-    printf("fim\n");
+    printf("100%%\n");
 
     #pragma endregion NOSSO_CODIGO
 
