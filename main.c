@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
     memcpy(sorted.pixels, pic[ORIGEM].pixels, sizeof(RGBpixel) * tam);
 
     // Realiza quicksort em sorted.pixels
-    // qsort(sorted.pixels, tam, sizeof(RGBpixel), &cmp);
+    qsort(sorted.pixels, tam, sizeof(RGBpixel), &cmp);
 
     // Determina SAIDA.pixels como sorted.pixels (debug para determinar se o qsort funciona)
     // memcpy(pic[SAIDA].pixels, sorted.pixels, sizeof(RGBpixel) * tam);
@@ -141,7 +141,6 @@ int main(int argc, char *argv[])
     printf("tamanho img: %d\n", tam);
 
     RGBpixel *ptra = pic[DESEJ].pixels, *ptrb = sorted.pixels;
-    RGBpixel lembra;
     RGBpixel montagem[tam];
     //int compara[3];
     //int *c;
@@ -152,10 +151,9 @@ int main(int argc, char *argv[])
         ptrb = sorted.pixels;
 
         // percorre sorted
-        int low = 0, high = tam - 1, result;
+        int low = 0, high = tam, result;
         while (low < high) {
             result = (low + high) / 2;
-            //printf("%d %d %d\n", low, result, high);
 
             int found = 0;
             switch (cmp(&sorted.pixels[result], ptra)) {
@@ -173,14 +171,13 @@ int main(int argc, char *argv[])
                 break;
             }
         }
-        lembra = sorted.pixels[result];
 
         //if (i % 10000 == 0) printf("\nloop i = %d completo | lembra: r = %c : g = %c : b = %c\n", i, lembra.r, lembra.g, lembra.b);
         if (i == tam / 10) printf("10%%\n");
         else if (i == tam / 4) printf("25%%\n");
         else if (i == tam / 2) printf("50%%\n");
         else if (i == 3 * tam / 4) printf("75%%\n");
-        montagem[i] = lembra;
+        montagem[i] = sorted.pixels[result];
         //debug
         //printf("contador i: %d, tam: %d\n", i, pic[DESEJ].height * pic[DESEJ].width);
     }
