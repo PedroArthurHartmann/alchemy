@@ -152,31 +152,29 @@ int main(int argc, char *argv[])
         ptrb = sorted.pixels;
 
         // percorre sorted
-        for (int j = 0; j < tam; j++, ptrb++) {
-            if (j == 0 || diff > abs(cmp2(ptrb, ptra))) {
-                lembra = *ptrb;
-                diff = abs(cmp2(ptrb, ptra));
-                
-                if (diff == 0) break;
-            }
-            /*if (j % 10000 == 0) {
-                printf("tam = %d | i = %d | j = %d | cmp2 = %d | diff = %d\n", tam, i, j, abs(cmp2(ptrb, ptra)), diff);
-            }*/
+        int low = 0, high = tam - 1, result;
+        while (low < high) {
+            result = (low + high) / 2;
+            //printf("%d %d %d\n", low, result, high);
 
-            /*if (j == 85) { // por algum motivo ele quebra sempre no 85
-                printf("ta no 85\n");
+            int found = 0;
+            switch (cmp(&sorted.pixels[result], ptra)) {
+                case 1:
+                    low = result + 1;
+                    break;
+                case -1:
+                    high = result - 1;
+                    break;
+                default:
+                    found = 1;
+                    break;
             }
-            else if (j == 86) {
-                printf("passou do 85\n");
-            }*/
-            /*if (j == 84 || j == 85) {
-                printf("  A | B\n");
-                printf("r %c | %c\n", ptra->r, ptrb->r);
-                printf("g %c | %c\n", ptra->g, ptrb->g);
-                printf("b %c | %c\n", ptra->b, ptrb->b);
-                printf("-------\n");
-            }*/
+            if (found) {
+                break;
+            }
         }
+        lembra = sorted.pixels[result];
+
         //if (i % 10000 == 0) printf("\nloop i = %d completo | lembra: r = %c : g = %c : b = %c\n", i, lembra.r, lembra.g, lembra.b);
         if (i == tam / 10) printf("10%%\n");
         else if (i == tam / 4) printf("25%%\n");
@@ -292,23 +290,6 @@ int cmp(const void *elem1, const void *elem2)
         r = -1;
     else if (b1 > b2)
         r = 1;
-    return r;
-}
-
-int cmp2(const void *elem1, const void *elem2)
-{
-    RGBpixel *ptr1 = (RGBpixel *)elem1;
-    RGBpixel *ptr2 = (RGBpixel *)elem2;
-    unsigned char r1 = ptr1->r;
-    unsigned char r2 = ptr2->r;
-    unsigned char g1 = ptr1->g;
-    unsigned char g2 = ptr2->g;
-    unsigned char b1 = ptr1->b;
-    unsigned char b2 = ptr2->b;
-    int r = 0;
-    r += r1 - r2;
-    r += g1 - g2;
-    r += b1 - b2;
     return r;
 }
 
