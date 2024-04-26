@@ -122,41 +122,29 @@ int main(int argc, char *argv[])
 
     int tam = pic[DESEJ].width * pic[DESEJ].height;
 
-    // Quicksort nos pixels de ORIGEM
-
     // Cria uma copia da imagem de origem
-    Img sorted;
-    sorted.width = pic[ORIGEM].width;
-    sorted.height = pic[ORIGEM].height;
+    Img sorted = pic[ORIGEM];
     sorted.pixels = malloc(tam * sizeof(RGBpixel));
     memcpy(sorted.pixels, pic[ORIGEM].pixels, sizeof(RGBpixel) * tam);
 
     // Realiza quicksort em sorted.pixels
     qsort(sorted.pixels, tam, sizeof(RGBpixel), &cmp);
 
-    // Determina SAIDA.pixels como sorted.pixels (debug para determinar se o qsort funciona)
-    // memcpy(pic[SAIDA].pixels, sorted.pixels, sizeof(RGBpixel) * tam);
-    
     // Montagem de SAIDA com base em sorted
     printf("tamanho img: %d\n", tam);
 
-    RGBpixel *ptra = pic[DESEJ].pixels, *ptrb = sorted.pixels;
+    RGBpixel *ptra = pic[DESEJ].pixels;
     RGBpixel montagem[tam];
-    //int compara[3];
-    //int *c;
-    int diff;
+
     // percorre pic[DESEJ].pixels
     for (int i = 0; i < tam; i++, ptra++) {
         
-        ptrb = sorted.pixels;
-
-        // percorre sorted
-        int low = 0, high = tam, result;
+        int low = 0, high = tam - 1, result;
         while (low < high) {
             result = (low + high) / 2;
 
             int found = 0;
-            switch (cmp(&sorted.pixels[result], ptra)) {
+            switch (cmp(ptra, &sorted.pixels[result])) {
                 case 1:
                     low = result + 1;
                     break;
@@ -172,18 +160,18 @@ int main(int argc, char *argv[])
             }
         }
 
-        //if (i % 10000 == 0) printf("\nloop i = %d completo | lembra: r = %c : g = %c : b = %c\n", i, lembra.r, lembra.g, lembra.b);
-        if (i == tam / 10) printf("10%%\n");
+        /*if (i == tam / 10) printf("10%%\n");
         else if (i == tam / 4) printf("25%%\n");
         else if (i == tam / 2) printf("50%%\n");
-        else if (i == 3 * tam / 4) printf("75%%\n");
+        else if (i == 3 * tam / 4) printf("75%%\n");*/
         montagem[i] = sorted.pixels[result];
-        //debug
+        //debug para saber se está demorando ou parado
         //printf("contador i: %d, tam: %d\n", i, pic[DESEJ].height * pic[DESEJ].width);
     }
+    // Determina SAIDA.pixels como sorted.pixels (debug para determinar se o qsort funciona)
+    //memcpy(pic[SAIDA].pixels, sorted.pixels, sizeof(RGBpixel) * tam);
     memcpy(pic[SAIDA].pixels, montagem, sizeof(RGBpixel) * tam);
-    printf("100%%\n");
-
+    
     #pragma endregion NOSSO_CODIGO
 
     // NÃO ALTERAR A PARTIR DAQUI!
