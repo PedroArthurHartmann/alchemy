@@ -124,22 +124,22 @@ int main(int argc, char *argv[])
 
     // Cria uma copia da imagem de origem
     Img sorted = pic[ORIGEM];
-    sorted.pixels = malloc(tam * sizeof(RGBpixel));
+    sorted.pixels = calloc(tam, sizeof(RGBpixel));
     memcpy(sorted.pixels, pic[ORIGEM].pixels, sizeof(RGBpixel) * tam);
 
     // Realiza quicksort em sorted.pixels
     qsort(sorted.pixels, tam, sizeof(RGBpixel), &cmp);
 
     // Montagem de SAIDA com base em sorted
-    printf("tamanho img: %d\n", tam);
+    //printf("tamanho img: %d\n", tam);
 
     RGBpixel *ptra = pic[DESEJ].pixels;
     RGBpixel montagem[tam];
-
+    clock_t start = clock();
     // percorre pic[DESEJ].pixels
     for (int i = 0; i < tam; i++, ptra++) {
         
-        int low = 0, high = tam - 1, result;
+        int low = 0, high = tam, result;
         while (low < high) {
             result = (low + high) / 2;
 
@@ -168,6 +168,8 @@ int main(int argc, char *argv[])
         //debug para saber se está demorando ou parado
         //printf("contador i: %d, tam: %d\n", i, pic[DESEJ].height * pic[DESEJ].width);
     }
+    clock_t end = clock();
+    printf("Algoritmo levou %.0f ms\n", ((float)(end - start) / CLOCKS_PER_SEC) * 1000);
     // Determina SAIDA.pixels como sorted.pixels (debug para determinar se o qsort funciona)
     //memcpy(pic[SAIDA].pixels, sorted.pixels, sizeof(RGBpixel) * tam);
     memcpy(pic[SAIDA].pixels, montagem, sizeof(RGBpixel) * tam);
