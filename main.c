@@ -160,10 +160,6 @@ int main(int argc, char *argv[])
             }
         }
 
-        /*if (i == tam / 10) printf("10%%\n");
-        else if (i == tam / 4) printf("25%%\n");
-        else if (i == tam / 2) printf("50%%\n");
-        else if (i == 3 * tam / 4) printf("75%%\n");*/
         montagem[i] = sorted.pixels[result];
         //debug para saber se está demorando ou parado
         //printf("contador i: %d, tam: %d\n", i, pic[DESEJ].height * pic[DESEJ].width);
