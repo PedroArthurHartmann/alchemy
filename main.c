@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 
     #pragma region NOSSO_CODIGO
 
-    int tam = pic[DESEJ].width * pic[DESEJ].height;
+    int tam = pic[SAIDA].width * pic[SAIDA].height;
 
     // Cria uma copia da imagem de origem
     Img sorted = pic[ORIGEM];
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     memcpy(sorted.pixels, pic[ORIGEM].pixels, sizeof(RGBpixel) * tam);
 
     // Realiza quicksort em sorted.pixels
-    qsort(sorted.pixels, tam, sizeof(RGBpixel), &cmp);
+    qsort(sorted.pixels, tam, sizeof(RGBpixel), cmp);
 
     // Montagem de SAIDA com base em sorted
     //printf("tamanho img: %d\n", tam);
@@ -141,18 +141,18 @@ int main(int argc, char *argv[])
         
         int low = 0, high = tam, result;
         while (low < high) {
-            result = (low + high) / 2;
+            result = low + ((high - low) / 2);
 
             int found = 0;
             switch (cmp(ptra, &sorted.pixels[result])) {
+                case 0:
+                    found = 1;
+                    break;
                 case 1:
                     low = result + 1;
                     break;
                 case -1:
                     high = result - 1;
-                    break;
-                default:
-                    found = 1;
                     break;
             }
             if (found) {
