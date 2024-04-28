@@ -21,6 +21,7 @@
 typedef struct
 {
     unsigned char r, g, b;
+    int index;
 } RGBpixel;
 
 // Uma imagem RGBpixel
@@ -120,54 +121,87 @@ int main(int argc, char *argv[])
 
     #pragma region NOSSO_CODIGO
 
-    int tam = pic[DESEJ].width * pic[DESEJ].height;
-
-    // Cria uma copia da imagem de origem
-    Img sorted = pic[ORIGEM];
-    sorted.pixels = malloc(tam * sizeof(RGBpixel));
-    memcpy(sorted.pixels, pic[ORIGEM].pixels, sizeof(RGBpixel) * tam);
-
-    // Realiza quicksort em sorted.pixels
-    qsort(sorted.pixels, tam, sizeof(RGBpixel), &cmp);
-
-    // Montagem de SAIDA com base em sorted
-    printf("tamanho img: %d\n", tam);
-
-    RGBpixel *ptra = pic[DESEJ].pixels;
-    RGBpixel montagem[tam];
-
-    // percorre pic[DESEJ].pixels
-    for (int i = 0; i < tam; i++, ptra++) {
-        
-        int low = 0, high = tam - 1, result;
-        while (low < high) {
-            result = (low + high) / 2;
-
-            int found = 0;
-            switch (cmp(ptra, &sorted.pixels[result])) {
-                case 1:
-                    low = result + 1;
-                    break;
-                case -1:
-                    high = result - 1;
-                    break;
-                default:
-                    found = 1;
-                    break;
-            }
-            if (found) {
-                break;
-            }
-        }
-
-        /*if (i == tam / 10) printf("10%%\n");
-        else if (i == tam / 4) printf("25%%\n");
-        else if (i == tam / 2) printf("50%%\n");
-        else if (i == 3 * tam / 4) printf("75%%\n");*/
-        montagem[i] = sorted.pixels[result];
-        //debug para saber se está demorando ou parado
-        //printf("contador i: %d, tam: %d\n", i, pic[DESEJ].height * pic[DESEJ].width);
+    if (pic[ORIGEM].width * pic[ORIGEM].height != pic[DESEJ].width * pic[DESEJ].height) {
+        printf("ERRO: imagens nao possuem mesma area.\n");
+        exit(2);
     }
+
+    int tam = pic[SAIDA].width * pic[SAIDA].height;
+
+    // Cria uma copia das imagens de origem e desejada
+    /*
+    Img origemSorted;
+    Img desejSorted;
+
+    desejSorted.pixels = calloc(tam , sizeof(RGBpixel));
+    origemSorted.pixels = calloc(tam , sizeof(RGBpixel));
+
+    printf("0.5 ");
+
+    memcpy(origemSorted.pixels, pic[ORIGEM].pixels, tam * sizeof(RGBpixel));
+    memcpy(desejSorted.pixels, pic[DESEJ].pixels, tam * sizeof(RGBpixel));
+
+    printf("1 ");
+
+    // Define ponteiros para os vetores de pixels
+
+    RGBpixel *ptrDesej = desejSorted.pixels;
+    RGBpixel *ptrOrig = origemSorted.pixels;*/
+
+    printf("0\n");
+
+    Img origemSorted = pic[ORIGEM], desejSorted = pic[DESEJ];
+
+    printf("1\n");
+
+    RGBpixel *ptrOrig = origemSorted.pixels;
+    RGBpixel *ptrDesej = desejSorted.pixels;
+
+    printf("2\n");
+
+    // Define o index dos pixels da imagem desejada
+
+    for (int i = 0; i < tam; i++, ptrDesej++) {
+        ptrDesej->index = i;
+        if (i % 10000 == 0) printf("i = %d r = %c g = %c b = %c\n", i, ptrDesej->r, ptrDesej->g, ptrDesej->b);
+    }
+    
+    printf("3 ");
+
+    // Realiza quicksort nas copias das imagens
+
+    qsort(origemSorted.pixels, tam, sizeof(RGBpixel), cmp);
+    qsort(desejSorted.pixels, tam, sizeof(RGBpixel), cmp);
+
+    printf("4 ");
+
+    // Reseta ptra e declara variaveis para a comparacao
+
+    ptrDesej = desejSorted.pixels;
+    RGBpixel montagem[tam];
+    clock_t start = clock();
+    int dif;
+
+    printf("5 ");
+    
+    // percorre desejSorted
+    for (int i = 0; i < tam; i++, ptrDesej++) {
+        ptrOrig = origemSorted.pixels;
+        dif = -1;
+        
+        for (int j = 0; j < tam; j++, ptrOrig++) {
+            // printf("i = %d | j = %d\n", i, j);
+            if (dif != -1 && dif < mediaDif(*ptrOrig,*ptrDesej)) {
+                ptrOrig--; break;
+            }
+            dif = mediaDif(*ptrOrig,*ptrDesej);
+            if (dif == 0) break;
+        }
+        montagem[ptrDesej->index] = *ptrOrig;
+    }
+
+    clock_t end = clock();
+    printf("Algoritmo levou %.0f ms\n", ((float)(end - start) / CLOCKS_PER_SEC) * 1000);
     // Determina SAIDA.pixels como sorted.pixels (debug para determinar se o qsort funciona)
     //memcpy(pic[SAIDA].pixels, sorted.pixels, sizeof(RGBpixel) * tam);
     memcpy(pic[SAIDA].pixels, montagem, sizeof(RGBpixel) * tam);
@@ -183,6 +217,16 @@ int main(int argc, char *argv[])
 
     // Entra no loop de eventos, não retorna
     glutMainLoop();
+}
+
+int mediaDif (RGBpixel a, RGBpixel b) {
+    int difRed = abs(b.r - a.r);
+    int difGreen = abs(b.g - a.g);
+    int difBlue = abs(b.b - a.b);
+
+    if (difRed > 50 || difGreen > 50 || difBlue > 50) return 999;
+
+    return (difRed + difGreen + difBlue) / 3;
 }
 
 // Carrega uma imagem para a struct Img
