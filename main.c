@@ -139,8 +139,8 @@ int main(int argc, char *argv[])
     // percorre pic[DESEJ].pixels
     for (int i = 0; i < tam; i++, ptra++) {
         
-        int low = 0, high = tam, result;
-        while (low < high) {
+        int low = 0, high = tam - 1, result;
+        while (low <= high) {
             result = low + ((high - low) / 2);
 
             int found = 0;
